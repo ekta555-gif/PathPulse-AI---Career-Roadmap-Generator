@@ -1,0 +1,6 @@
+
+{
+  "name": "PathPulse AI",
+  "description": "A personalized career learning path agent that analyzes your resume and target role to generate a custom curriculum using free public resources.",
+  "requestFramePermissions": []
+}
