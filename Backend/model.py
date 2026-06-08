@@ -25,7 +25,7 @@ def train_and_save():
     model.fit(df[['experience', 'projects', 'skills']], df['target'])
     
     joblib.dump(model, 'path_model.pkl')
-    print("✅ Model trained and saved as path_model.pkl")
+   
 
 if __name__ == "__main__":
     train_and_save()

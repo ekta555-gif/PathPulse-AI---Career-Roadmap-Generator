@@ -1,5 +1,5 @@
 fastapi
 uvicorn
 pydantic
-google-generativeai    # Gemini AI se connect karne ke liye
-python-dotenv          # .env file se API key read karne ke liye
+google-generativeai   
+python-dotenv          

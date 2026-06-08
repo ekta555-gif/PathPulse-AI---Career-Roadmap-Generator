@@ -13,7 +13,7 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
-# Test which models are available on your key
+# Testing which models are available on this key
 for m in genai.list_models():
     if "generateContent" in m.supported_generation_methods:
         print("Available model:", m.name)

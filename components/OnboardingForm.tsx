@@ -20,7 +20,7 @@ const OnboardingForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Profile object बनाना
+    // Making profile object 
     const profile: UserProfile = {
       ...formData,
     };
