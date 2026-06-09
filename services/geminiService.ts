@@ -4,16 +4,16 @@ import { LearningPath, UserProfile } from "../types";
 
 // createAgentChat
 export const createAgentChat = (profile: any, path: any) => {
-  // Yahan GoogleAI.GoogleGenerativeAI use ho raha hai
+  // Here GoogleAI.GoogleGenerativeAI is being used
   const genAI = new GoogleAI.GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "models/gemini-2.0-flash" });
 
   return model.startChat({
     history: [],
   });
 };
 /**
- * Backend URL - Make sure your Python FastAPI is running on port 8000
+ * Backend URL - Makeing sure Python FastAPI is running on port 8000
  */
 const BACKEND_URL = "http://localhost:8000";
 
@@ -22,7 +22,7 @@ const BACKEND_URL = "http://localhost:8000";
  */
 export const generateLearningPath = async (profile: UserProfile): Promise<LearningPath> => {
   try {
-    // Port 8000 ya 8001 jo bhi tumne set kiya ho
+    // Port 8000 ya 8001 whatever was set
     const response = await axios.post("http://localhost:8000/predict-level", {
       name: profile.name,
       dream_role: profile.targetPosition, // Ye backend ke 'dream_role' se match hona chahiye

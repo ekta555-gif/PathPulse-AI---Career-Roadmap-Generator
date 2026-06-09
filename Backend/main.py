@@ -38,7 +38,7 @@ class UserProfileData(BaseModel):
 
 @app.post("/predict-level")
 async def generate_path(data: UserProfileData):
-    models_to_try = ['models/gemini-2.0-flash', 'models/gemini-2.5-flash', 'models/gemini-2.5-pro']
+    models_to_try = ['models/gemini-2.0-flash','models/gemini-2.0-flash-lite', 'models/gemini-2.5-flash']
     last_error = ""
 
     for model_name in models_to_try:
@@ -78,7 +78,7 @@ Return this exact structure:
             res_text = response.text.strip()
             print(f"Raw response: {res_text[:200]}")
 
-            # Clean markdown if present
+            # Cleaning markdown if present
             if res_text.startswith("```"):
                 res_text = res_text.split("\n", 1)[-1]
                 if "```" in res_text:

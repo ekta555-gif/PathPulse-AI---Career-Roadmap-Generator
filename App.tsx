@@ -23,7 +23,7 @@ if (!path || !path.roadmap) {
     }
 
     setLearningPath(path);
-    // Timeout isliye taaki React ko render karne ka time mile fir scroll ho
+    // Timeout so that React can have time to render then scroll 
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);

@@ -16,16 +16,16 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
 
   useEffect(() => {
     try {
-    chatRef.current = createAgentChat(profile, path);
-    setMessages([{ 
-      role: 'agent', 
-      text: `Welcome, ${profile.name}! I've synthesized your custom path to ${path.targetRole}. I analyzed your background and found ${path.skillGaps?.length || 0} key areas to bridge. Where should we start?` 
-    }]);
-  } catch (err) {
-    console.error("Chat Agent Error:", err);
-    setMessages([{ role: 'agent', text: "Chat assistant is offline, but your roadmap is ready below!" }]);
-  }
-}, [path, profile]);
+      chatRef.current = createAgentChat(profile, path);
+      setMessages([{ 
+        role: 'agent', 
+        text: `Welcome, ${profile.name}! I've synthesized your custom path to ${path.targetRole}. I analyzed your background and found ${path.skillGaps?.length || 0} key areas to bridge. Where should we start?` 
+      }]);
+    } catch (err) {
+      console.error("Chat Agent Error:", err);
+      setMessages([{ role: 'agent', text: "Chat assistant is offline, but your roadmap is ready below!" }]);
+    }
+  }, [path, profile]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -43,9 +43,10 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
     setIsChatting(true);
 
     try {
-      const result = await chatRef.current.sendMessage({ message: userMsg });
+      const result = await chatRef.current.sendMessage(userMsg);
       setMessages(prev => [...prev, { role: 'agent', text: result.text }]);
-    } catch (err) {
+    } catch (err: any) {
+      console.error("Chat error full details:", err);
       setMessages(prev => [...prev, { role: 'agent', text: "I encountered a minor processing error. Please rephrase your query." }]);
     } finally {
       setIsChatting(false);
@@ -66,7 +67,6 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       <div className="lg:col-span-8 space-y-8 animate-fadeIn">
-        {/* Hero Card */}
         <div className="bg-white rounded-3xl border border-slate-200/60 p-10 shadow-xl shadow-slate-200/50 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50/50 rounded-full blur-3xl -mr-20 -mt-20"></div>
           
@@ -107,7 +107,6 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
           </div>
         </div>
 
-        {/* Dynamic Timeline */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-extrabold text-slate-900 flex items-center space-x-3">
@@ -123,18 +122,11 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
           <div className="relative border-l-2 border-slate-200 ml-6 pl-10 space-y-12 pb-8">
             {path.roadmap.map((week, idx) => (
               <div key={idx} className="relative group">
-                {/* Connector Node */}
                 <div className="absolute -left-[51px] top-0 w-6 h-6 rounded-xl bg-white border-2 border-slate-200 group-hover:border-indigo-600 transition-colors flex items-center justify-center shadow-sm">
                   <span className="text-[10px] font-black text-slate-400 group-hover:text-indigo-600">{week.week}</span>
                 </div>
 
                 <div className="bg-white rounded-3xl border border-slate-200/60 p-8 hover:shadow-2xl hover:shadow-indigo-100 transition-all duration-500 hover:-translate-y-1 relative">
-                  <div className="absolute top-8 right-8 text-indigo-100 group-hover:text-indigo-50 transition-colors">
-                    <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                    </svg>
-                  </div>
-                  
                   <div className="mb-6">
                     <span className="text-[11px] font-black text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full mb-3 inline-block">Milestone Week {week.week}</span>
                     <h3 className="text-2xl font-extrabold text-slate-900 mb-2">{week.topic}</h3>
@@ -152,8 +144,8 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
                       >
                         <div className="flex-grow">
                           <div className="flex items-center space-x-2 mb-2">
-                             <span className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">{res.type}</span>
-                             <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                            <span className="text-[9px] font-black uppercase text-indigo-500 tracking-tighter">{res.type}</span>
+                            <div className="w-1 h-1 rounded-full bg-slate-300"></div>
                           </div>
                           <h4 className="text-sm font-bold text-slate-800 group-hover/res:text-indigo-700 transition-colors leading-snug">{res.title}</h4>
                           <p className="text-[11px] text-slate-500 mt-2 line-clamp-2 leading-relaxed">{res.description}</p>
@@ -173,7 +165,6 @@ const RoadmapView: React.FC<Props> = ({ path, profile }) => {
         </div>
       </div>
 
-      {/* Modern Agent Sidebar */}
       <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
         <div className="bg-white rounded-3xl border border-slate-200/60 shadow-2xl shadow-slate-200/40 flex flex-col h-[650px] overflow-hidden">
           <div className="p-6 bg-slate-900 text-white flex items-center justify-between">
