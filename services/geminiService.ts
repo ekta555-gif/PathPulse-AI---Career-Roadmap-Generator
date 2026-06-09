@@ -15,7 +15,7 @@ export const createAgentChat = (profile: any, path: any) => {
 /**
  * Backend URL - Makeing sure Python FastAPI is running on port 8000
  */
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = "https://pathpulse-ai-career-roadmap-generator-ntg1.onrender.com";
 
 /**
  * Generates the full learning path curriculum by calling the Python Backend.

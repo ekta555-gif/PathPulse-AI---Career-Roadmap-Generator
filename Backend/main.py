@@ -38,7 +38,7 @@ class UserProfileData(BaseModel):
 
 @app.post("/predict-level")
 async def generate_path(data: UserProfileData):
-    models_to_try = ['models/gemini-2.0-flash','models/gemini-2.0-flash-lite', 'models/gemini-2.5-flash']
+    models_to_try = ['models/gemini-2.0-flash','models/gemini-2.0-flash-lite']
     last_error = ""
 
     for model_name in models_to_try:
