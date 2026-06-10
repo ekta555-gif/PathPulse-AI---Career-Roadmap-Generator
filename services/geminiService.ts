@@ -23,7 +23,7 @@ const BACKEND_URL = "https://pathpulse-ai-career-roadmap-generator-ntg1.onrender
 export const generateLearningPath = async (profile: UserProfile): Promise<LearningPath> => {
   try {
     // Port 8000 ya 8001 whatever was set
-    const response = await axios.post("http://localhost:8000/predict-level", {
+    const response = await axios.post(`${BACKEND_URL}/predict-level`, {
       name: profile.name,
       dream_role: profile.targetPosition, // Ye backend ke 'dream_role' se match hona chahiye
       experience_years: 0,

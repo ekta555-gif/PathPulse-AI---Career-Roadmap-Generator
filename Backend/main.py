@@ -14,9 +14,6 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 # Testing which models are available on this key
-for m in genai.list_models():
-    if "generateContent" in m.supported_generation_methods:
-        print("Available model:", m.name)
 
 app = FastAPI()
 app.add_middleware(
@@ -38,7 +35,7 @@ class UserProfileData(BaseModel):
 
 @app.post("/predict-level")
 async def generate_path(data: UserProfileData):
-    models_to_try = ['models/gemini-2.0-flash','models/gemini-2.0-flash-lite']
+    models_to_try = ['models/gemini-2.0-flash']
     last_error = ""
 
     for model_name in models_to_try:
@@ -96,7 +93,7 @@ Return this exact structure:
 
     raise HTTPException(status_code=500, detail=f"All models failed. Last error: {last_error}")
             
-    raise HTTPException(status_code=500, detail=f"All models failed. Last error: {last_error}")
+  
 
 if __name__ == "__main__":
     import uvicorn
