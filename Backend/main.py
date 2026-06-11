@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,8 +13,6 @@ if not api_key:
     raise ValueError("GEMINI_API_KEY not set in .env file")
 
 genai.configure(api_key=api_key)
-
-# Testing which models are available on this key
 
 app = FastAPI()
 app.add_middleware(
@@ -35,13 +34,14 @@ class UserProfileData(BaseModel):
 
 @app.post("/predict-level")
 async def generate_path(data: UserProfileData):
-    models_to_try = ['models/gemini-2.0-flash']
+    models_to_try = ['models/gemini-2.5-flash', 'models/gemini-2.0-flash', 'models/gemini-2.0-flash-lite']
     last_error = ""
 
     for model_name in models_to_try:
-        try:
-            model = genai.GenerativeModel(model_name)
-            prompt = f"""
+        for attempt in range(3):
+            try:
+                model = genai.GenerativeModel(model_name)
+                prompt = f"""
 You are a career coach. Return ONLY a valid JSON object, no markdown, no explanation.
 
 Generate a career roadmap for {data.name} who wants to become a {data.dream_role}.
@@ -70,30 +70,25 @@ Return this exact structure:
   ]
 }}
 """
-            print(f"Trying model: {model_name}")
-            response = model.generate_content(prompt)
-            res_text = response.text.strip()
-            print(f"Raw response: {res_text[:200]}")
+                response = model.generate_content(prompt)
+                res_text = response.text.strip()
 
-            # Cleaning markdown if present
-            if res_text.startswith("```"):
-                res_text = res_text.split("\n", 1)[-1]
-                if "```" in res_text:
-                    res_text = res_text.rsplit("```", 1)[0]
-            res_text = res_text.strip()
+                if res_text.startswith("```"):
+                    res_text = res_text.split("\n", 1)[-1]
+                    if "```" in res_text:
+                        res_text = res_text.rsplit("```", 1)[0]
+                res_text = res_text.strip()
 
-            parsed = json.loads(res_text)
-            print("Success!")
-            return parsed
+                return json.loads(res_text)
 
-        except Exception as e:
-            print(f"Error with {model_name}: {str(e)}")
-            last_error = str(e)
-            continue
+            except Exception as e:
+                last_error = str(e)
+                if "429" in str(e) and attempt < 2:
+                    time.sleep(10)
+                    continue
+                break
 
     raise HTTPException(status_code=500, detail=f"All models failed. Last error: {last_error}")
-            
-  
 
 if __name__ == "__main__":
     import uvicorn
